@@ -14,11 +14,14 @@ public class Main {
             System.out.println("Input array for change: ");
             inArr = reader.readLine();
             // First task
-            moveLeft(strToInts(inArr), strToInts(inData)[1]);
+            int[] rotatedArrayResult = moveLeft(strToInts(inArr), strToInts(inData)[1]);
+
+            System.out.println("Input array size for repair");
+            int arrSize = strToInts(reader.readLine())[0];
             System.out.println("Input damaged monotone array for automatic repair");
             // Second task
-            restoreArray(strToInts(reader.readLine()));
-            System.out.println("Input array length");
+            int[] restoreResult = restoreArray(strToInts(reader.readLine()), arrSize);
+            System.out.println("Input array size for ranges search");
             len = strToInts(reader.readLine())[0];
             System.out.println("Input array for ranges search");
             // Third task
@@ -38,20 +41,18 @@ public class Main {
         return numbers;
     }
     // make array move left on some positions
-    private static void moveLeft(int[] array, int positions) {
+    private static int[] moveLeft(int[] array, int positions) {
         for (int i = 0; i < positions; i++) {
             int tmp = array[0];
             for (int j = 0; j < array.length - 1; j++)
                 array[j] = array[j + 1];
             array[array.length - 1] = tmp;
         }
-        for (int i : array) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
+        return array;
     }
-    private static void restoreArray(int[] array) {
-        for (int i = 0; i < array.length - 2; i++) {
+    // algorithm to restore the sequence
+    private static int[] restoreArray(int[] array, int size) {
+        for (int i = 0; i < size - 2; i++) {
             // break down line
             int noMonotone = Math.abs(array[i] - array[i + 1]);
             if (noMonotone > 1) {
@@ -60,11 +61,9 @@ public class Main {
                 } else array[i + 1] = array[i] + 1;
             }
         }
-        for (int i : array) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
+        return array;
     }
+    // range search algo
     private static void rangeSearch(int[] array, int size) {
         // range counter
         int counter = 0;
@@ -79,7 +78,7 @@ public class Main {
             // search on other elements
             } else {
                 monotone = Math.abs(array[i + 1] - array[i]);
-                if (monotone == 1) counter++;
+                if (monotone <= 1) counter++;
                 // we saw a drop in values
                 if ( monotone > 1 ) {
                     if (counter == 0) {
